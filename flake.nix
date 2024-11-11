@@ -90,6 +90,7 @@
         "docker"
         "postman"
         "1password"
+        "slite"
         
         "terraform"
         "awscli"
