@@ -1,29 +1,12 @@
 {
   description = "Example nix-darwin system flake";
 
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Homebrew
-    nix-homebrew = {
-      url = "github:zhaofengli-wip/nix-homebrew";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
-
-    homebrew-core = {
-      url = "github:homebrew/homebrew-core";
-      flake = false;
-    };
-    homebrew-cask = {
-      url = "github:homebrew/homebrew-cask";
-      flake = false;
-    };
-    homebrew-bundle = {
-      url = "github:homebrew/homebrew-bundle";
-      flake = false;
-    };
   };
 
   outputs = inputs@{ self, nix-darwin, nixpkgs }:
@@ -36,26 +19,12 @@
           pkgs.neovim  
           pkgs.git
           pkgs.curl
-          pkgs.xcode
         ];
 
-      nix-homebrew.darwinModules.nix-homebrew =
-      {
-        nix-homebrew = {
-          enable = true;
-          # Apple Silicon Only: Also install Homebrew under the default Intel prefix for Rosetta 2
-          enableRosetta = true;
-          user = "juanpablo";
-
-          taps = {
-            "homebrew/homebrew-core" = homebrew-core;
-            "homebrew/homebrew-cask" = homebrew-cask;
-            "homebrew/homebrew-bundle" = homebrew-bundle;
-          };
-          mutableTaps = false;
-        };
+      nixpkgs.config = {
+        allowUnfree = true;
       };
-
+      
       # Auto upgrade nix package and the daemon service.
       services.nix-daemon.enable = true;
       # nix.package = pkgs.nix;
@@ -74,10 +43,27 @@
       system.stateVersion = 5;
 
       # The platform the configuration will be used on.
-      nixpkgs.hostPlatform = "x86_64-darwin";
+      nixpkgs.hostPlatform = "aarch64-darwin";
 
       # Fingerprint sudo with Touch ID.
       security.pam.enableSudoTouchIdAuth = true;
+
+      # ZSH
+      programs.zsh.enableSyntaxHighlighting = true;
+      # programs.zsh.enableFastSyntaxHighlighting = true;
+      programs.zsh.enableFzfCompletion = true;
+      programs.zsh.enableFzfHistory = true;
+      programs.zsh.promptInit = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+
+      # Fonts
+      fonts.packages = with pkgs; [
+        liberation_ttf
+        fira-code
+        fira-code-symbols
+        mplus-outline-fonts.githubRelease
+        dina-font
+        proggyfonts
+      ];
 
       # Homebrew
       homebrew.enable = true;
@@ -86,30 +72,48 @@
         "iterm2"
         "alacritty"
         "slack"
-        "mas"
         "docker"
         "postman"
         "1password"
         "slite"
+        "jetbrains-toolbox"
+        "phpstorm"  
         
-        "terraform"
-        "awscli"
         "google-chrome"
         "alfred"
         "maccy"
       ];
+
       homebrew.brews = [
+        "awscli"
+        "fzf"
+        "mas"
+        "terraform"
+        "nvm"
+        "gh"
       ];
-    };
+
+      system.defaults.dock.persistent-apps = [
+        "/Applications/Slack.app/"
+        "/Applications/Alacritty.app/"
+        "/Applications/Visual Studio Code.app/"
+        "/Applications/PhpStorm.app/"
+        "/Applications/Google Chrome.app/"
+        "/Applications/1Password.app/"
+      ];
+
+  };  
   in
   {
     # Build darwin flake using:
-    # $ darwin-rebuild build --flake .#lightit
-    darwinConfigurations."lightit" = nix-darwin.lib.darwinSystem {
-      modules = [ configuration ];
+    # $ darwin-rebuild build --flake .#Juans-MacBook-Air
+    darwinConfigurations.Juans-MacBook-Air = nix-darwin.lib.darwinSystem {
+      modules = [ 
+   	configuration
+     ];
     };
 
     # Expose the package set, including overlays, for convenience.
-    darwinPackages = self.darwinConfigurations."lightit".pkgs;
+    darwinPackages = self.darwinConfigurations.Juans-MacBook-Air.pkgs;
   };
 }
