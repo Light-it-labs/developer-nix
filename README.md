@@ -40,10 +40,16 @@ To update the mac once the configuration file is changed, you can run:
 darwin-rebuild switch --flake ~/.config/nix-darwin
 ```
 
-## Add Alacritty configuration
+### Add Alacritty configuration
 
 ```bash
 mkdir -p ~/.config/alacritty
 cd ~/.config/alacritty
 wget https://raw.githubusercontent.com/Light-it-labs/developer-nix/refs/heads/main/alacrity.toml
+```
+
+### Add ll Command
+
+```bash
+echo "alias ll=\"ls -la\"" >> ~/.zshrc
 ```
