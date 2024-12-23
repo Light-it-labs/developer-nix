@@ -26,6 +26,9 @@ To run it for the first time use:
 ```bash
 nix run nix-darwin -- switch --flake ~/.config/nix-darwin
 ```
+> [!TIP]
+> If the icons on the dock look like a "?" then restart your terminal and run the command on the next section to refresh the dock.
+
 ## Rebuilding
 
 To update the mac once the configuration file is changed, you can run:
