@@ -55,6 +55,10 @@
       programs.zsh.enableFzfHistory = true;
       programs.zsh.promptInit = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
 
+      environment.shellAliases = {
+	ll = "ls -l";
+      };
+
       # Fonts
       fonts.packages = with pkgs; [
         liberation_ttf
