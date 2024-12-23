@@ -1,5 +1,5 @@
 {
-  description = "Example nix-darwin system flake";
+  description = "Light-it's nix-darwin system flake";
 
 
   inputs = {
@@ -114,6 +114,6 @@
     };
 
     # Expose the package set, including overlays, for convenience.
-    darwinPackages = self.darwinConfigurations.Juans-MacBook-Air.pkgs;
+    darwinPackages = self.darwinConfigurations.simple.pkgs;
   };
 }
