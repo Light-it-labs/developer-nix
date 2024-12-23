@@ -11,10 +11,14 @@ curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix 
 And Brew:
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+echo >> /Users/juan/.zprofile
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/juan/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"
 ```
 
 Then we have to restart the terminal and install Nix Darwin, this is the nix tool that we will be using to configure our machine:
 ```bash
+brew install wget
 mkdir -p ~/.config/nix-darwin
 cd ~/.config/nix-darwin
 nix flake init -t nix-darwin
