@@ -33,6 +33,15 @@ nix run nix-darwin -- switch --flake ~/.config/nix-darwin
 > [!TIP]
 > If the icons on the dock look like a "?" then restart your terminal and run the command on the next section to refresh the dock.
 
+## Update Terraform
+
+The terraform version installed by Nix is deprecated. Ensure you update the package version by running:
+
+```bash
+brew update
+brew upgrade terraform
+```
+
 ## Rebuilding
 
 To update the mac once the configuration file is changed, you can run:
